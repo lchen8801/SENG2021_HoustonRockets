@@ -5,7 +5,7 @@
   <div class="wrapper fadeInDown">
   <div id="formContent">
     <br>
-    <form>
+    <form action="/">
       <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
       <input type="text" id="login" class="form-control" name="login" placeholder="username/email"
 required>
@@ -37,6 +37,23 @@ export default {
   components: {
     navbar: NavBar,
   },
+  //   methods: {
+  //     getHeaders() {
+  //       const path = 'http://localhost:5000/';
+  //       axios
+  //         .get(path)
+  //         .then((res) => {
+  //           this.navBarHeaders = res.data;
+  //         })
+  //         .catch((error) => {
+  //           // eslint-disable-next-line
+  //           console.error(error);
+  //         });
+  //     },
+  //   },
+  //   created() {
+  //     this.getHeaders();
+  //   },
 };
 </script>
 <style>
