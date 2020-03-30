@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Signup from '../views/Signup.vue';
+import Reset from '../views/Reset.vue';
 
 Vue.use(Router);
 export default new Router({
@@ -23,6 +24,11 @@ export default new Router({
       path: '/signup',
       name: 'Signup',
       component: Signup,
+    },
+    {
+      path: '/reset',
+      name: 'Reset',
+      component: Reset,
     },
   ],
 });
