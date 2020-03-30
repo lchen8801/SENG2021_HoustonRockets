@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     getHeaders() {
-      const path = 'http://localhost:5000/';
+      const path = 'http://localhost:5000/nav';
       axios
         .get(path)
         .then((res) => {

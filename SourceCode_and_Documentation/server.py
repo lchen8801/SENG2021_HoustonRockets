@@ -30,7 +30,7 @@ NAVBAR = [
 # enable CORS
 CORS(APP, resources={r'/*':{'origins': '*'}})
 
-@APP.route('/')
+@APP.route('/nav')
 def index():
     return jsonify(NAVBAR)
 
