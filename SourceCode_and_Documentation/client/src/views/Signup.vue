@@ -6,17 +6,24 @@
   <div id="formContent">
     <br>
     <form>
-      <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
-      <input type="text" id="login" class="form-control" name="login" placeholder="username/email"
+      <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
+      <input type="text" id="first_name" class="form-control" placeholder="first name"
 required>
-      <input type="password" id="password" class="form-control" name="login" placeholder="password"
+      <input type="text" id="last_name" class="form-control" placeholder="last name"
 required>
+      <input type="email" id="email" class="form-control" placeholder="email"
+required>
+      <input type="text" id="username" class="form-control" placeholder="username"
+required>
+      <input type="password" id="password" class="form-control" placeholder="password"
+required>
+      <input type="password" id="confirm_password" class="form-control"
+placeholder="confirm password" equalto="#password" required>
       <br>
-      <button type="submit" class="btn btn-primary">Sign in</button>
+      <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
     <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a><br>
-      Don't have an account yet? <a class="underlineHover" href="signup">Sign up</a>
+      Already have an account? <a class="underlineHover" href="login">Sign in</a>
     </div>
   </div>
 </div>
@@ -28,7 +35,7 @@ required>
 import NavBar from '../components/NavBar.vue';
 
 export default {
-  name: 'Login',
+  name: 'Signup',
   //   data() {
   //     return {
   //       navBarHeaders: '',
@@ -171,6 +178,33 @@ input[type=password]:focus {
   border-bottom: 2px solid #5fbae9;
 }
 input[type=password]:placeholder {
+  color: #cccccc;
+}
+input[type=email] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 85%;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+input[type=email]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid #5fbae9;
+}
+input[type=email]:placeholder {
   color: #cccccc;
 }
 button[type=submit] {
