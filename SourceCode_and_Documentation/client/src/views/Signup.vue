@@ -5,7 +5,7 @@
   <div class="wrapper fadeInDown">
   <div id="formContent">
     <br>
-    <form>
+    <form action="/">
       <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
       <input type="text" id="first_name" class="form-control" placeholder="first name"
 required>

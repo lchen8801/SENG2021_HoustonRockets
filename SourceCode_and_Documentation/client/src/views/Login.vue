@@ -5,7 +5,7 @@
   <div class="wrapper fadeInDown">
   <div id="formContent">
     <br>
-    <form>
+    <form action="/">
       <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
       <input type="text" id="login" class="form-control" name="login" placeholder="username/email"
 required>
@@ -15,7 +15,7 @@ required>
       <button type="submit" class="btn btn-primary">Sign in</button>
     </form>
     <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a><br>
+      <a class="underlineHover" href="reset">Forgot Password?</a><br>
       Don't have an account yet? <a class="underlineHover" href="signup">Sign up</a>
     </div>
   </div>
