@@ -7,7 +7,6 @@ DEBUG = True
 # Create the application.
 APP = Flask(__name__)
 APP.config.from_object(__name__)
-
 NAVBAR = [
     {
         'title': 'Music',
@@ -75,14 +74,15 @@ EVENTS = [
     }
 ]
 
-signedIn = True
-user = "Luke"
 
 # enable CORS
 CORS(APP, resources={r'/*':{'origins': '*'}})
 
+signedIn = True
+user = "Luke"
 @APP.route('/nav')
 def nav():
+    print(signedIn)
     response = {
         'navBarHeaders': NAVBAR,
         'signedIn': signedIn,
@@ -93,6 +93,18 @@ def nav():
 @APP.route('/events')
 def events():
     return jsonify(EVENTS)
+
+@APP.route('/login')
+def login():
+	global signedIn
+	signedIn = True
+	return jsonify({})
+
+@APP.route('/logout')
+def logout():
+	global signedIn
+	signedIn = False
+	return jsonify({})
 
 if __name__ == '__main__':
     APP.run()

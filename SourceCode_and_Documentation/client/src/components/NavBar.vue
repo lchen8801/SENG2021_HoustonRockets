@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar type="light" variant="light" fixed="top">
-      <b-navbar-brand href="#">
+      <b-navbar-brand href="/">
         <img src="../assets/logo.png" />
       </b-navbar-brand>
       <b-navbar-nav>
@@ -12,20 +12,21 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-form>
-          <b-form-input placeholder="Search"></b-form-input>
+          <b-form-input placeholder="Search" style="background-color:white;border-color:#CCCCCC;">
+          </b-form-input>
           <b-button variant="outline-primary">
             <img src="../assets/search_icon.png" width="20px" height="20px"/>
           </b-button>
         </b-nav-form>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-button variant="outline-primary" v-if="signedIn === false">
+        <b-button variant="outline-primary" v-if="signedIn === false" href="login">
           <img src="../assets/user_icon.png" width="20px" height="20px"/>
           Sign In/Register
         </b-button>
         <b-nav-item-dropdown v-else v-bind:text="user" right>
           <b-dropdown-item href="#"> Account Details </b-dropdown-item>
-          <b-dropdown-item href="#"> Logout </b-dropdown-item>
+          <b-dropdown-item @click="logout" href="#"> Logout </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-navbar>
@@ -60,6 +61,17 @@ export default {
           // eslint-disable-next-line
           console.error(error);
         });
+    },
+    logout() {
+      const path = 'http://localhost:5000/logout';
+      axios
+        .get(path)
+        .then((response) => console.log(response))
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+      this.$router.go();
     },
   },
   created() {
