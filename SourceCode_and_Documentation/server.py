@@ -30,10 +30,6 @@ NAVBAR = [
 # enable CORS
 CORS(APP, resources={r'/*':{'origins': '*'}})
 
-@APP.route('/test', methods=['GET'])
-def test():
-    return jsonify('why wont bootstrap work')
-
 @APP.route('/')
 def index():
     return jsonify(NAVBAR)

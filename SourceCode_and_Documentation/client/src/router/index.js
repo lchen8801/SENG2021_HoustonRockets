@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Test from '../components/Test.vue';
-import NavBar from '../components/NavBar.vue';
+import Home from '../views/Home.vue';
 
 Vue.use(Router);
 
@@ -10,14 +9,9 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/test',
-      name: 'Test',
-      component: Test,
-    },
-    {
       path: '/',
       name: 'Home',
-      component: NavBar,
+      component: Home,
     },
   ],
 });
