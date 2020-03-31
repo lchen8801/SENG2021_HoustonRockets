@@ -5,7 +5,7 @@
   <div class="wrapper fadeInDown">
   <div id="formContent">
     <br>
-    <form>
+    <form action="/emailsent">
       <h1 class="h3 mb-3 font-weight-normal">Forgot username/password?</h1>
       <p align="justify" color="#A9A9A9" style="margin-left:10%;margin-right:10%">
 Not to worry! Enter your email address below and we will send you an email with

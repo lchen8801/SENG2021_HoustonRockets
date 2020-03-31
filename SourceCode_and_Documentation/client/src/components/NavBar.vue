@@ -20,7 +20,7 @@
         </b-nav-form>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-button variant="outline-primary" v-if="signedIn === false" href="login">
+        <b-button variant="outline-primary" v-if="signedIn === false" href="signin">
           <img src="../assets/user_icon.png" width="20px" height="20px"/>
           Sign In/Register
         </b-button>
@@ -65,13 +65,15 @@ export default {
     logout() {
       const path = 'http://localhost:5000/logout';
       axios
-        .get(path)
-        .then((response) => console.log(response))
+        .post(path)
+        .then((response) => {
+          console.log(response);
+          this.$router.go();
+        })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
-      this.$router.go();
     },
   },
   created() {

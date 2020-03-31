@@ -5,10 +5,10 @@
   <div class="wrapper fadeInDown">
   <div id="formContent">
     <br>
-    <form action="/">
+    <form @submit.prevent="login">
       <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
       <input type="text" id="login" class="form-control" name="login" placeholder="username/email"
-required>
+ref="username" required>
       <input type="password" id="password" class="form-control" name="login" placeholder="password"
 required>
       <br>
@@ -16,7 +16,7 @@ required>
     </form>
     <div id="formFooter">
       <a class="underlineHover" href="reset">Forgot Password?</a><br>
-      Don't have an account yet? <a class="underlineHover" href="signup">Sign up</a>
+      Don't have an account yet? <a class="underlineHover" href="register">Register</a>
     </div>
   </div>
 </div>
@@ -25,10 +25,12 @@ required>
 </template>
 <script>
 // import axios from 'axios';
+// import axios from 'axios';
+import axios from 'axios';
 import NavBar from '../components/NavBar.vue';
 
 export default {
-  name: 'Login',
+  name: 'Signup',
   //   data() {
   //     return {
   //       navBarHeaders: '',
@@ -36,6 +38,24 @@ export default {
   //   },
   components: {
     navbar: NavBar,
+  },
+  methods: {
+    login() {
+      const path = 'http://localhost:5000/login';
+      const username = this.$refs.username.value;
+      axios
+        .post(path, {
+          username,
+        })
+        .then((response) => {
+          console.log(response);
+          this.$router.push('/');
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
   },
   //   methods: {
   //     getHeaders() {

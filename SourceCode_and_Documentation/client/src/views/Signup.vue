@@ -5,8 +5,8 @@
   <div class="wrapper fadeInDown">
   <div id="formContent">
     <br>
-    <form action="/">
-      <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
+    <form @submit.prevent="signup">
+      <h1 class="h3 mb-3 font-weight-normal">Register</h1>
       <input type="text" id="first_name" class="form-control" placeholder="first name"
 required>
       <input type="text" id="last_name" class="form-control" placeholder="last name"
@@ -14,16 +14,16 @@ required>
       <input type="email" id="email" class="form-control" placeholder="email"
 required>
       <input type="text" id="username" class="form-control" placeholder="username"
-required>
+required ref="username">
       <input type="password" id="password" class="form-control" placeholder="password"
 required>
       <input type="password" id="confirm_password" class="form-control"
 placeholder="confirm password" equalto="#password" required>
       <br>
-      <button type="submit" class="btn btn-primary">Sign up</button>
+      <button type="submit" class="btn btn-primary">Register</button>
     </form>
     <div id="formFooter">
-      Already have an account? <a class="underlineHover" href="login">Sign in</a>
+      Already have an account? <a class="underlineHover" href="signin">Sign in</a>
     </div>
   </div>
 </div>
@@ -32,6 +32,7 @@ placeholder="confirm password" equalto="#password" required>
 </template>
 <script>
 // import axios from 'axios';
+import axios from 'axios';
 import NavBar from '../components/NavBar.vue';
 
 export default {
@@ -43,6 +44,24 @@ export default {
   //   },
   components: {
     navbar: NavBar,
+  },
+  methods: {
+    signup() {
+      const path = 'http://localhost:5000/signup';
+      const username = this.$refs.username.value;
+      axios
+        .post(path, {
+          username,
+        })
+        .then((response) => {
+          console.log(response);
+          this.$router.push('/');
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
   },
   //   methods: {
   //     getHeaders() {

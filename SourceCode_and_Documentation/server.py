@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 
 # config
@@ -78,11 +78,10 @@ EVENTS = [
 # enable CORS
 CORS(APP, resources={r'/*':{'origins': '*'}})
 
-signedIn = True
+signedIn = False
 user = "Luke"
 @APP.route('/nav')
 def nav():
-    print(signedIn)
     response = {
         'navBarHeaders': NAVBAR,
         'signedIn': signedIn,
@@ -94,13 +93,23 @@ def nav():
 def events():
     return jsonify(EVENTS)
 
-@APP.route('/login')
+@APP.route('/login', methods = ['POST'])
 def login():
 	global signedIn
+	global user
 	signedIn = True
+	user = request.get_json().get("username")
 	return jsonify({})
 
-@APP.route('/logout')
+@APP.route('/signup', methods = ['POST'])
+def signup():
+	global signedIn
+	global user
+	signedIn = True
+	user = request.get_json().get("username")
+	return jsonify({})
+
+@APP.route('/logout', methods = ['POST'])
 def logout():
 	global signedIn
 	signedIn = False
