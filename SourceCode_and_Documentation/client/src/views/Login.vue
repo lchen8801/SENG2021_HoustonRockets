@@ -12,7 +12,7 @@ required>
       <input type="password" id="password" class="form-control" name="login" placeholder="password"
 required>
       <br>
-      <button type="submit" class="btn btn-primary">Sign in</button>
+      <button type="submit" class="btn btn-primary" @click="signIn">Sign in</button>
     </form>
     <div id="formFooter">
       <a class="underlineHover" href="reset">Forgot Password?</a><br>
@@ -23,39 +23,30 @@ required>
   </div>
 </div>
 </template>
+
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 import NavBar from '../components/NavBar.vue';
 
 export default {
   name: 'Login',
-  //   data() {
-  //     return {
-  //       navBarHeaders: '',
-  //     };
-  //   },
   components: {
     navbar: NavBar,
   },
-  //   methods: {
-  //     getHeaders() {
-  //       const path = 'http://localhost:5000/';
-  //       axios
-  //         .get(path)
-  //         .then((res) => {
-  //           this.navBarHeaders = res.data;
-  //         })
-  //         .catch((error) => {
-  //           // eslint-disable-next-line
-  //           console.error(error);
-  //         });
-  //     },
-  //   },
-  //   created() {
-  //     this.getHeaders();
-  //   },
+  methods: {
+    signIn() {
+      const path = 'http://localhost:5000/login';
+      axios
+        .get(path)
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+  },
 };
 </script>
+
 <style>
 html {
   background-color: #56baed;

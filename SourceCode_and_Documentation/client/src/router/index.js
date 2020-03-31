@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Signup from '../views/Signup.vue';
 import Reset from '../views/Reset.vue';
+import Search from '../views/Search.vue';
 
 Vue.use(Router);
 export default new Router({
@@ -29,6 +30,11 @@ export default new Router({
       path: '/reset',
       name: 'Reset',
       component: Reset,
+    },
+    {
+      path: '/search/:searchTerm',
+      name: 'Search',
+      component: Search,
     },
   ],
 });

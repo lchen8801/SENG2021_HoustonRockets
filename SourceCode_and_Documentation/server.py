@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+from json import loads
 
 # config
 DEBUG = True
@@ -64,14 +65,14 @@ EVENTS = [
     },
     {
         'name': 'Hamilton',
-        'catgeory': 'Music/Arts',
+        'category': 'Music/Arts',
         'img': 'https://uk.tmconst.com/ccp-salesforce-images/AU/AU_Hamilton_2019_720405.jpg?auto=webp'
     },
     {
         'name': 'Hella Mega Tour',
         'category': 'Music',
         'img': 'https://uk.tmconst.com/ccp-salesforce-images/AU/HMT_720x405.jpg?auto=webp'
-    }
+    },
 ]
 
 
@@ -82,7 +83,6 @@ signedIn = True
 user = "Luke"
 @APP.route('/nav')
 def nav():
-    print(signedIn)
     response = {
         'navBarHeaders': NAVBAR,
         'signedIn': signedIn,
@@ -105,6 +105,24 @@ def logout():
 	global signedIn
 	signedIn = False
 	return jsonify({})
+
+@APP.route('/search', methods=['GET'])
+def search():
+    response = []
+    searchTerm = (loads(request.args.get('getParams'))["searchTerm"])
+    for event in EVENTS:
+        if event['name'] == searchTerm:
+            response.append(event)
+    return jsonify(response)
+
+@APP.route('/categories', methods=['GET'])
+def getCategories():
+    response = []
+    for event in EVENTS:
+        print(event)
+        if event['category'] not in response:
+            response.append(event['category'])
+    return jsonify(response)
 
 if __name__ == '__main__':
     APP.run()

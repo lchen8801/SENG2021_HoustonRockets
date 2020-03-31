@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <b-navbar type="light" variant="light" fixed="top">
       <b-navbar-brand href="/">
         <img src="../assets/logo.png" />
@@ -12,9 +12,10 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-form>
-          <b-form-input placeholder="Search" style="background-color:white;border-color:#CCCCCC;">
+          <b-form-input ref="searchBar" placeholder="Search"
+            style="background-color:white;border-color:#CCCCCC;">
           </b-form-input>
-          <b-button variant="outline-primary">
+          <b-button variant="outline-primary" @click="search">
             <img src="../assets/search_icon.png" width="20px" height="20px"/>
           </b-button>
         </b-nav-form>
@@ -72,6 +73,11 @@ export default {
           console.error(error);
         });
       this.$router.go();
+    },
+    search() {
+      const searchVal = this.$refs.searchBar.vModelValue;
+      this.$emit('changedSearch', searchVal);
+      this.$router.push({ name: 'Search', params: { searchTerm: searchVal } }).catch((err) => { console.error(err); });
     },
   },
   created() {
