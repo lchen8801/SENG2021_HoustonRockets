@@ -2,9 +2,10 @@
   <div>
     <navbar @changedSearch="getEvents($event)"></navbar>
     <filters float:left></filters>
-    <div class="my-5" float:right style="width: 50%">
-      <h1 style="padding-top: 30px">{{ searchTerm }}</h1>
-      <b-card-group deck class="mx-5">
+    <div class="my-5" style="width: 73%; float:right">
+      <h6 style="color: grey"> Showing events for </h6>
+      <h1>{{ searchTerm }}</h1>
+      <b-card-group deck class="mr-5">
         <eventcard
             v-for="event in events"
             v-bind:key="event.id"
