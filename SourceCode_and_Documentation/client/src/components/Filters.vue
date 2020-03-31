@@ -1,6 +1,6 @@
 <template>
-  <div float:left style="width:20%">
-    <h1> Filters </h1>
+  <div style="float:left; width:23%; padding-left: 20px" class="my-5">
+    <h3> Filters </h3>
     <b-card header="Date">
       <b-list-group flush>
         <b-list-group-item button active> Any Day </b-list-group-item>
