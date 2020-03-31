@@ -6,6 +6,7 @@ import Signup from '../views/Signup.vue';
 import Reset from '../views/Reset.vue';
 import EmailSent from '../views/EmailSent.vue';
 import Search from '../views/Search.vue';
+import Event from '../views/Event.vue';
 
 Vue.use(Router);
 export default new Router({
@@ -41,6 +42,11 @@ export default new Router({
       path: '/search/:searchTerm',
       name: 'Search',
       component: Search,
+    },
+    {
+      path: '/event/:id',
+      name: 'Event',
+      component: Event,
     },
   ],
 });

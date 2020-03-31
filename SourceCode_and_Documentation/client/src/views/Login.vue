@@ -15,8 +15,8 @@ required>
       <button type="submit" class="btn btn-primary" @click="signIn">Sign in</button>
     </form>
     <div id="formFooter">
-      <a class="underlineHover" href="reset">Forgot Password?</a><br>
-      Don't have an account yet? <a class="underlineHover" href="register">Register</a>
+      <a class="underlineHover" href="/reset">Forgot Password?</a><br>
+      Don't have an account yet? <a class="underlineHover" href="/register">Register</a>
     </div>
   </div>
 </div>

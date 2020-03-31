@@ -11,6 +11,7 @@
             v-bind:name="event.name"
             v-bind:category="event.category"
             v-bind:img_src="event.img"
+            v-bind:id="event.id"
             style="min-width: 25%; max-width: 35%"
         ></eventcard>
       </b-card-group>

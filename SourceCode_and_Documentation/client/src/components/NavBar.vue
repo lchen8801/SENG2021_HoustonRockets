@@ -21,7 +21,7 @@
         </b-nav-form>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-button variant="outline-primary" v-if="signedIn === false" href="signin">
+        <b-button variant="outline-primary" v-if="signedIn === false" href="/signin">
           <img src="../assets/user_icon.png" width="20px" height="20px"/>
           Sign In/Register
         </b-button>

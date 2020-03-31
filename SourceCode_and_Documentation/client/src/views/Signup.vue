@@ -23,7 +23,7 @@ placeholder="confirm password" equalto="#password" required>
       <button type="submit" class="btn btn-primary">Register</button>
     </form>
     <div id="formFooter">
-      Already have an account? <a class="underlineHover" href="signin">Sign in</a>
+      Already have an account? <a class="underlineHover" href="/signin">Sign in</a>
     </div>
   </div>
 </div>
