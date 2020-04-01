@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid">
-    <navbar @changedSearch="getEvents($event)"></navbar>
+    <navbar @changedSearch="getEvents($event, null)"></navbar>
     <div class="row">
       <div class="col-3">
-        <filters></filters>
+        <filters @categoryFilter="getEvents(searchTerm, $event)"></filters>
       </div>
       <div class="col-9" style="padding-bottom: 50px">
         <h6 style="color: grey"> Showing events for </h6>
@@ -45,15 +45,15 @@ export default {
     filters: Filters,
   },
   methods: {
-    getEvents(searchVal) {
+    getEvents(searchVal, categoryFilter) {
       const path = 'http://localhost:5000/search';
-      let getParams = { searchTerm: this.$route.params.searchTerm };
+      const getParams = { searchTerm: this.$route.params.searchTerm, category: null };
       this.searchTerm = this.$route.params.searchTerm;
       if (searchVal != null) {
-        getParams = { searchTerm: searchVal };
+        getParams.searchTerm = searchVal;
+        getParams.category = categoryFilter;
         this.searchTerm = searchVal;
       }
-      console.log(getParams);
       axios
         .get(path, { params: { getParams } })
         .then((res) => {
@@ -66,7 +66,7 @@ export default {
     },
   },
   created() {
-    this.getEvents();
+    this.getEvents(undefined, undefined);
   },
 };
 </script>

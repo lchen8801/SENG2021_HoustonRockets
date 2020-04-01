@@ -19,7 +19,6 @@ export default {
       }
       const path = 'http://localhost:5000/favourite';
       const eid = this.$props.id;
-      console.log(this.$props.id);
       const isFavourite = this.$props.favourite;
       axios
         .post(path, {

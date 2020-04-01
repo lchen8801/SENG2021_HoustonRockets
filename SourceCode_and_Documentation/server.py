@@ -145,10 +145,15 @@ def logout():
 @APP.route('/search', methods=['GET'])
 def search():
     response = []
+    print(loads(request.args.get('getParams')))
     searchTerm = (loads(request.args.get('getParams'))["searchTerm"])
+    category = (loads(request.args.get('getParams'))["category"])
     for event in EVENTS:
         if searchTerm in event['name'] or searchTerm in event['category']:
             response.append(event)
+    if category is not None and category != 'Any category':
+        filteredResponse = filterCategory(response, category)
+        return jsonify(filteredResponse)
     return jsonify(response)
 
 @APP.route('/categories', methods=['GET'])
@@ -175,6 +180,13 @@ def favourite():
         if event['id'] == eid:
             event['favourite'] = favourite
     return jsonify({})
+
+def filterCategory(events, category):
+    response = []
+    for event in events:
+        if event['category'] == category:
+            response.append(event)
+    return response
 
 if __name__ == '__main__':
     APP.run()

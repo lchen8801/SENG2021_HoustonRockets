@@ -79,7 +79,6 @@ export default {
       const path = 'http://localhost:5000/event';
       const getParams = { id: this.$route.params.id };
       this.id = this.$route.params.id;
-      console.log(getParams);
       axios
         .get(path, { params: { getParams } })
         .then((res) => {

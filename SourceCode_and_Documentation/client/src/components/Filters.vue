@@ -3,19 +3,19 @@
     <h2> Filters </h2>
     <b-card header="Date">
       <b-list-group flush>
-        <b-list-group-item ref='any day' button active @click="changeActive('any day')">
+        <b-list-group-item button active>
           Any Day
         </b-list-group-item>
-        <b-list-group-item ref='datepicker' button @click="changeActive('datepicker')">
+        <b-list-group-item button>
             <b-form-datepicker></b-form-datepicker>
         </b-list-group-item>
-        <b-list-group-item ref='today' button @click="changeActive('today')">
+        <b-list-group-item button>
           Today
         </b-list-group-item>
-        <b-list-group-item ref='tomorrow' button @click="changeActive('tomorrow')">
+        <b-list-group-item button>
           Tomorrow
         </b-list-group-item>
-        <b-list-group-item ref='this week' button @click="changeActive('this week')">
+        <b-list-group-item button>
           This week
         </b-list-group-item>
       </b-list-group>
@@ -25,8 +25,12 @@
     </b-card>
     <b-card header="Category/Genre">
       <b-list-group flush>
-        <b-list-group-item button active> Any category </b-list-group-item>
-        <b-list-group-item button v-for="category in categories" v-bind:key="category.id">
+        <b-list-group-item button @click="changeCategory('Any category')"
+        :active="categoryButton === 'Any category'">
+          Any category
+        </b-list-group-item>
+        <b-list-group-item button v-for="category in categories" v-bind:key="category.id"
+        @click="changeCategory(category)" :active="categoryButton === category">
             {{ category }}
         </b-list-group-item>
       </b-list-group>
@@ -42,6 +46,7 @@ export default {
   data() {
     return {
       categories: '',
+      categoryButton: 'Any category',
     };
   },
   methods: {
@@ -57,9 +62,9 @@ export default {
           console.error(error);
         });
     },
-    changeActive(buttonRef) {
-      // this.$refs.buttonRef.active = true
-      console.log(buttonRef);
+    changeCategory(category) {
+      this.categoryButton = category;
+      this.$emit('categoryFilter', category);
     },
   },
   created() {
