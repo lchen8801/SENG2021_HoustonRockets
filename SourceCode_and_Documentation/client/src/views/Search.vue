@@ -5,7 +5,7 @@
       <div class="col-3">
         <filters></filters>
       </div>
-      <div class="col-9">
+      <div class="col-9" style="padding-bottom: 50px">
         <h6 style="color: grey"> Showing events for </h6>
         <h1>{{ searchTerm }}</h1>
         <b-card-group deck>
@@ -16,7 +16,8 @@
               v-bind:category="event.category"
               v-bind:img_src="event.img"
               v-bind:id="event.id"
-              style="min-width: 25%; max-width: 35%"
+              v-bind:favourite="event.favourite"
+              style="min-width: 30%; max-width: 30%"
           ></eventcard>
         </b-card-group>
       </div>
