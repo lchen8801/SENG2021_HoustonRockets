@@ -6,6 +6,7 @@
 
 <style>
 #app {
-  margin-top: 60px
+  margin-top: 60px;
+  background-color: white;
 }
 </style>
