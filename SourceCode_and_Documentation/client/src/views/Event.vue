@@ -16,7 +16,8 @@
     </div>
     <div class="col">
       <iframe style="width:100%;height:100%"
-      v-bind:src="'https://www.google.com/maps/embed/v1/directions?origin=UNSW&destination='
+      v-bind:src="'https://www.google.com/maps/embed/v1/directions?origin=' + latitude
+      + ',' + longitude + '&destination='
       + eventdata.location + '&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk'"
       allowfullscreen></iframe>
     </div>
@@ -60,6 +61,8 @@ export default {
     return {
       eventdata: '',
       searchTerm: '',
+      latitude: '',
+      longitude: '',
     };
   },
   components: {
@@ -84,6 +87,15 @@ export default {
   },
   created() {
     this.getEvent();
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        this.gettingLocation = false;
+        this.latitude = pos.coords.latitude;
+        this.longitude = pos.coords.longitude;
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
   },
 };
 </script>
