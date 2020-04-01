@@ -10,6 +10,7 @@
             v-bind:category="event.category"
             v-bind:img_src="event.img"
             v-bind:id="event.id"
+            v-bind:favourite="event.favourite"
             style="min-width: 25%; max-width: 35%"
         ></eventcard>
       </b-card-group>

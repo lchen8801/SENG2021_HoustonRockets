@@ -3,11 +3,17 @@
     <navbar></navbar>
 <div class="container">
   <div class="row">
-    <div class="col">
+    <div class="col-2">
       <h1> {{ eventdata.name }} </h1>
     </div>
+    <div class="col-4">
+      <favourite-button v-bind:id="eventdata.id" v-bind:favourite="eventdata.favourite">
+      </favourite-button>
+    </div>
     <div class="col">
-      <h2>Directions</h2>
+      <div class="text-center">
+        <h2>Directions</h2>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -31,8 +37,7 @@
       <div class="text-center">
     <h2>Date and Weather</h2>
       <div class="weathercard">
-        <h1>
-04 APR 2020</h1><h5>Sunny</h5>
+        <h1>{{ eventdata.date }}</h1><h5>Sunny</h5>
         <h1><i class="wi wi-day-sunny"></i>  {{ eventdata.weather.temperature }}°</h1>
       <p> Wind: {{ eventdata.weather.wind }}<br>
       Precipitation: {{ eventdata.weather.precipitation }}<br>
@@ -53,17 +58,18 @@
 <script>
 import axios from 'axios';
 import NavBar from '../components/NavBar.vue';
+import FavouriteButton from '../components/favouriteButton.vue';
 
 export default {
   name: 'Event',
   data() {
     return {
       eventdata: '',
-      searchTerm: '',
     };
   },
   components: {
     navbar: NavBar,
+    favouriteButton: FavouriteButton,
   },
   methods: {
     getEvent() {
