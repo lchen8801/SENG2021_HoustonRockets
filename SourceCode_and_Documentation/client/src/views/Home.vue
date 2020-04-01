@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <navbar></navbar>
-    <div class="my-5">
-      <b-card-group deck class="mx-5">
+    <div style="padding-bottom: 50px">
+      <b-card-group deck>
         <eventcard
             v-for="event in events"
             v-bind:key="event.id"
