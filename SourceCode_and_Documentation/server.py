@@ -146,7 +146,6 @@ def search():
 def getCategories():
     response = []
     for event in EVENTS:
-        print(event)
         if event['category'] not in response:
             response.append(event['category'])
     return jsonify(response)
@@ -157,7 +156,6 @@ def getEvent():
     print(eid)
     for event in EVENTS:
         if event['id'] == eid:
-            print(event);
             return jsonify(event)
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <b-navbar type="light" variant="light" fixed="top">
       <b-navbar-brand href="/">
         <img src="../assets/logo.png" />

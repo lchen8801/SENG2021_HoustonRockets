@@ -1,21 +1,25 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <navbar @changedSearch="getEvents($event)"></navbar>
-    <filters float:left></filters>
-    <div class="my-5" style="width: 73%; float:right">
-      <h6 style="color: grey"> Showing events for </h6>
-      <h1>{{ searchTerm }}</h1>
-      <b-card-group deck class="mr-5">
-        <eventcard
-            v-for="event in events"
-            v-bind:key="event.id"
-            v-bind:name="event.name"
-            v-bind:category="event.category"
-            v-bind:img_src="event.img"
-            v-bind:id="event.id"
-            style="min-width: 25%; max-width: 35%"
-        ></eventcard>
-      </b-card-group>
+    <div class="row">
+      <div class="col-3">
+        <filters></filters>
+      </div>
+      <div class="col-9">
+        <h6 style="color: grey"> Showing events for </h6>
+        <h1>{{ searchTerm }}</h1>
+        <b-card-group deck>
+          <eventcard
+              v-for="event in events"
+              v-bind:key="event.id"
+              v-bind:name="event.name"
+              v-bind:category="event.category"
+              v-bind:img_src="event.img"
+              v-bind:id="event.id"
+              style="min-width: 25%; max-width: 35%"
+          ></eventcard>
+        </b-card-group>
+      </div>
     </div>
   </div>
 </template>
