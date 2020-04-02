@@ -3,12 +3,15 @@
     <navbar></navbar>
 <div class="container">
   <div class="row">
-    <div class="col-2">
+    <div class="col-3">
       <h1> {{ eventdata.name }} </h1>
     </div>
-    <div class="col-4">
+    <div class="col-1">
       <favourite-button v-bind:id="eventdata.id" v-bind:favourite="eventdata.favourite">
       </favourite-button>
+    </div>
+    <div class="col-2">
+      <b-button> Buy Tickets </b-button>
     </div>
     <div class="col">
       <div class="text-center">
