@@ -41,11 +41,11 @@
       <div class="text-center">
     <h2>Date and Weather</h2>
       <div class="weathercard">
-        <h1>{{ eventdata.date }}</h1><h5>Sunny</h5>
-        <h1><i class="wi wi-day-sunny"></i>  {{ eventdata.weather.temperature }}°</h1>
-      <p> Wind: {{ eventdata.weather.wind }}<br>
-      Precipitation: {{ eventdata.weather.precipitation }}<br>
-      Humidity: {{ eventdata.weather.humidity }}</p>
+        <h1>{{ eventdate.toDateString() }}</h1><h4>{{ eventdata.weather.weather[0].main }}</h4>
+        <h1><img v-bind:src="'http://openweathermap.org/img/wn/' + eventdata.weather.weather[0].icon + '@2x.png'">
+        {{ eventdata.weather.main.temp }}°C</h1>
+      <p> Wind: {{ eventdata.weather.wind.speed }}m/s<br>
+      Humidity: {{ eventdata.weather.main.humidity }}%</p>
       </div>
       <h2 style="margin-top:20px;">Venue Information</h2>
       <iframe height="450" style="width:100%;"
@@ -71,6 +71,7 @@ export default {
       eventdata: '',
       latitude: '',
       longitude: '',
+      eventdate: '',
     };
   },
   components: {
@@ -86,6 +87,7 @@ export default {
         .get(path, { params: { getParams } })
         .then((res) => {
           this.eventdata = res.data;
+          this.eventdate = new Date(this.eventdata.date * 1000);
         })
         .catch((error) => {
           // eslint-disable-next-line
