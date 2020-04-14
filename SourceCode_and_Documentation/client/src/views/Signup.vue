@@ -7,18 +7,21 @@
     <br>
     <form @submit.prevent="signup">
       <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+      <b-alert v-bind:show="showAlert" variant="danger">
+        Passwords do not match.
+      </b-alert>
       <input type="text" id="first_name" class="form-control" placeholder="first name"
-required>
+required ref="first_name">
       <input type="text" id="last_name" class="form-control" placeholder="last name"
-required>
+required ref="last_name">
       <input type="email" id="email" class="form-control" placeholder="email"
-required>
+required ref="email">
       <input type="text" id="username" class="form-control" placeholder="username"
 required ref="username">
       <input type="password" id="password" class="form-control" placeholder="password"
-required>
+required ref="password">
       <input type="password" id="confirm_password" class="form-control"
-placeholder="confirm password" equalto="#password" required>
+placeholder="confirm password" required ref="confirm_password">
       <br>
       <button type="submit" class="btn btn-primary">Register</button>
     </form>
@@ -37,49 +40,46 @@ import NavBar from '../components/NavBar.vue';
 
 export default {
   name: 'Signup',
-  //   data() {
-  //     return {
-  //       navBarHeaders: '',
-  //     };
-  //   },
   components: {
     navbar: NavBar,
+  },
+  data() {
+    return {
+      showAlert: false,
+    };
   },
   methods: {
     signup() {
       const path = 'http://localhost:5000/signup';
+      const firstName = this.$refs.first_name.value;
+      const lastName = this.$refs.last_name.value;
+      const email = this.$refs.email.value;
       const username = this.$refs.username.value;
-      axios
-        .post(path, {
-          username,
-        })
-        .then((response) => {
-          console.log(response);
-          this.$router.push('/');
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+      const password = this.$refs.password.value;
+      const confirmPassword = this.$refs.confirm_password.value;
+
+      if (password === confirmPassword) {
+        axios
+          .post(path, {
+            firstName,
+            lastName,
+            email,
+            username,
+            password,
+          })
+          .then((response) => {
+            console.log(response);
+            this.$router.push('/signin');
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.error(error);
+          });
+      } else {
+        this.showAlert = true;
+      }
     },
   },
-  //   methods: {
-  //     getHeaders() {
-  //       const path = 'http://localhost:5000/';
-  //       axios
-  //         .get(path)
-  //         .then((res) => {
-  //           this.navBarHeaders = res.data;
-  //         })
-  //         .catch((error) => {
-  //           // eslint-disable-next-line
-  //           console.error(error);
-  //         });
-  //     },
-  //   },
-  //   created() {
-  //     this.getHeaders();
-  //   },
 };
 </script>
 <style>

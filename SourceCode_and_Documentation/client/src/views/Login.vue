@@ -7,12 +7,15 @@
     <br>
     <form @submit.prevent="login">
       <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
+      <b-alert v-bind:show="showAlert" variant="danger">
+        Sorry but the username or password you entered was incorrect. Please try again.
+      </b-alert>
       <input type="text" id="login" class="form-control" name="login" placeholder="username/email"
 ref="username" required>
       <input type="password" id="password" class="form-control" name="login" placeholder="password"
-required>
+required ref="password">
       <br>
-      <button type="submit" class="btn btn-primary" @click="signIn">Sign in</button>
+      <button type="submit" class="btn btn-primary" @click="login">Sign in</button>
     </form>
     <div id="formFooter">
       <a class="underlineHover" href="/reset">Forgot Password?</a><br>
@@ -33,17 +36,27 @@ export default {
   components: {
     navbar: NavBar,
   },
+  data() {
+    return {
+      showAlert: false,
+    };
+  },
   methods: {
     login() {
       const path = 'http://localhost:5000/login';
       const username = this.$refs.username.value;
+      const password = this.$refs.password.value;
       axios
         .post(path, {
           username,
+          password,
         })
-        .then((response) => {
-          console.log(response);
-          this.$router.push('/');
+        .then((res) => {
+          if (res.data === 'success') {
+            this.$router.push('/');
+          } else {
+            this.showAlert = true;
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
