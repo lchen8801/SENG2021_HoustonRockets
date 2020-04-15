@@ -7,8 +7,8 @@
             v-for="event in events"
             v-bind:key="event.id"
             v-bind:name="event.name"
-            v-bind:category="event.category"
-            v-bind:img_src="event.img"
+            v-bind:category="event.classifications[0].segment.name"
+            v-bind:img_src="event.images[0].url"
             v-bind:id="event.id"
             v-bind:favourite="event.favourite"
             style="min-width: 25%; max-width: 35%"
@@ -41,6 +41,7 @@ export default {
         .get(path)
         .then((res) => {
           this.events = res.data;
+          console.log(this.events);
         })
         .catch((error) => {
           // eslint-disable-next-line

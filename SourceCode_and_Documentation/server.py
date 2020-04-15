@@ -122,7 +122,23 @@ def nav():
 
 @APP.route('/events')
 def events():
-    return jsonify(EVENTS)
+    events = []
+    page = 0
+    while len(events) < 9:
+        url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&page={page}&countryCode=AU"
+        res = requests.get(url)
+        events.extend(res.json()['_embedded']['events'])
+        for event1 in events:
+            i = 0
+            while i < len(events):
+                event2 = events[i]
+                if event1['name'] in event2['name'] and event1 != event2:
+                    events.remove(event2)
+                else:
+                    i += 1
+        page += 1
+
+    return jsonify(events[0:9])
 
 
 @APP.route('/login', methods=['POST'])
