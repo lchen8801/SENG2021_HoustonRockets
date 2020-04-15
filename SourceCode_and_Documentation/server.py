@@ -4,6 +4,7 @@ from json import loads
 import requests
 import os.path
 import pickle
+import dateutil.parser as dp
 
 # config
 DEBUG = True
@@ -128,14 +129,20 @@ def events():
         url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&page={page}&countryCode=AU"
         res = requests.get(url)
         events.extend(res.json()['_embedded']['events'])
-        for event1 in events:
+        j = 0
+        while j < len(events):
+            event1 = events[j]
+            # print("event1 " + str(events.index(event1)) + " " + event1['id'] + " " + event1['name'])
             i = 0
             while i < len(events):
                 event2 = events[i]
-                if event1['name'] in event2['name'] and event1 != event2:
-                    events.remove(event2)
+                # print("event2 " + str(events.index(event2)) + " " + event2['id'] + " " + event2['name'])
+                if event1['name'] in event2['name'] and i != j:
+                    events.pop(i)
+                    # print("hit")
                 else:
                     i += 1
+            j += 1
         page += 1
 
     return jsonify(events[0:9])
@@ -205,16 +212,18 @@ def getCategories():
 
 @APP.route('/event', methods=['GET'])
 def getEvent():
-    eid = int(loads(request.args.get('getParams'))["id"])
-    print(eid)
-    for event in EVENTS:
-        if event['id'] == eid:
-            # Get weather information
-            r = requests.get(f"http://api.openweathermap.org/data/2.5/forecast?lat={event['latitude']}&lon={event['longitude']}&appid=b228ffe1aaa8f657c39a46b39d6d9499&units=metric").json()['list']
-            weatherInfo = next((i for i in r if i['dt'] > event['date']), None)
-            event['weather'] = weatherInfo
-            print(event)
-            return jsonify(event)
+    eid = loads(request.args.get('getParams'))["id"]
+    url = f"https://app.ticketmaster.com/discovery/v2/events/{eid}.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE"
+    res = requests.get(url)
+    event = res.json()
+    # Get weather information
+    r = requests.get(f"http://api.openweathermap.org/data/2.5/forecast?lat={event['_embedded']['venues'][0]['location']['latitude']}&lon={event['_embedded']['venues'][0]['location']['longitude']}&appid=b228ffe1aaa8f657c39a46b39d6d9499&units=metric").json()['list']
+    date = dp.parse(event['dates']['start']['dateTime'])
+    event['date'] = date.strftime('%s')
+    weatherInfo = next((i for i in r if i['dt'] > int(event['date'])), None)
+    event['weather'] = weatherInfo
+    event['favourite'] = False
+    return jsonify(event)
 
 @APP.route('/favourite', methods=['POST'])
 def favourite():

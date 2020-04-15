@@ -21,26 +21,27 @@
   </div>
   <div class="row">
     <div class="col">
-      <img v-bind:src="eventdata.img" style="width:100%;">
+      <img v-bind:src="eventdata.images[0].url" style="width:100%;">
     </div>
     <div class="col">
       <iframe style="width:100%;height:100%"
       v-bind:src="'https://www.google.com/maps/embed/v1/directions?origin=' + latitude
       + ',' + longitude + '&destination='
-      + eventdata.location + '&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk'"
+      + eventdata._embedded.venues[0].name + '&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk'"
       allowfullscreen></iframe>
     </div>
   </div>
   <div class="row" style="margin-top:5%">
     <div class="col">
       <div class="weathercard">
-        <p>{{ eventdata.desc }}</p>
+        <!-- <p>{{ eventdata.desc }}</p> -->
+        <p> testing </p>
       </div>
     </div>
   <div class="col">
       <div class="text-center">
     <h2>Date and Weather</h2>
-      <div class="weathercard">
+      <div class="weathercard" v-if="eventdata.weather != null">
         <h1>{{ eventdate.toDateString() }}</h1><h4>{{ eventdata.weather.weather[0].main }}</h4>
         <h1><img v-bind:src="'http://openweathermap.org/img/wn/' + eventdata.weather.weather[0].icon + '@2x.png'">
         {{ eventdata.weather.main.temp }}°C</h1>
@@ -49,7 +50,7 @@
       </div>
       <h2 style="margin-top:20px;">Venue Information</h2>
       <iframe height="450" style="width:100%;"
-      v-bind:src="'https://www.google.com/maps/embed/v1/place?q=' + eventdata.location
+      v-bind:src="'https://www.google.com/maps/embed/v1/place?q=' + eventdata._embedded.venues[0].name
       + 'Hordern%20Pavillion&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk'"
       allowfullscreen></iframe>
       </div>
@@ -87,6 +88,7 @@ export default {
         .get(path, { params: { getParams } })
         .then((res) => {
           this.eventdata = res.data;
+          console.log(this.eventdata);
           this.eventdate = new Date(this.eventdata.date * 1000);
         })
         .catch((error) => {
