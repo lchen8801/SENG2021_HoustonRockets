@@ -5,6 +5,7 @@ import requests
 import os.path
 import pickle
 import dateutil.parser as dp
+from datetime import datetime, timedelta
 
 # config
 DEBUG = True
@@ -39,8 +40,6 @@ if os.path.isfile('data.p'):
     user_data = pickle.load(open('data.p', 'rb'))
 
 # loads data into file data.p
-
-
 def save():
     with open('data.p', 'wb') as FILE:
         pickle.dump(user_data, FILE)
@@ -139,24 +138,62 @@ def logout():
 
 @APP.route('/search', methods=['GET'])
 def search():
-    response = []
     print(loads(request.args.get('getParams')))
     searchTerm = (loads(request.args.get('getParams'))["searchTerm"])
+    date = (loads(request.args.get('getParams'))["date"])
+    location = (loads(request.args.get('getParams'))["location"])
     category = (loads(request.args.get('getParams'))["category"])
-    for event in EVENTS:
-        if searchTerm in event['name'] or searchTerm in event['category']:
-            response.append(event)
-    if category is not None and category != 'Any category':
-        filteredResponse = filterCategory(response, category)
-        return jsonify(filteredResponse)
-    return jsonify(response)
+    genre = (loads(request.args.get('getParams'))["genre"])
+    
+    classification = []
+    if category != '' and category != 'Any category':
+        classification.append(category)
+    if genre != '' and genre != 'Any genre':
+        classification.append(genre)
+    if len(classification) == 0:
+        classification = ''
+    
+    if date == 'Any Date' or date == '':
+        startDate = ''
+        endDate = ''
+    elif date == 'Today':
+        startDate = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
+        endDate = datetime.today().strftime('%Y-%m-%dT23:59:59Z')
+    elif date == 'Tomorrow':
+        startDate = (datetime.today() + timedelta(days = 1)).strftime('%Y-%m-%dT00:00:00Z')
+        endDate = (datetime.today() + timedelta(days = 1)).strftime('%Y-%m-%dT23:59:59Z')
+    elif date == 'This week':
+        startDate = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
+        endDate = (datetime.today() + timedelta(days = 7)).strftime('%Y-%m-%dT23:59:59Z')
+    else:
+        print(f"date: {date}")
+        startDate = dp.parse(date).strftime('%Y-%m-%dT00:00:00Z')
+        endDate = dp.parse(date).strftime('%Y-%m-%dT23:59:59Z')
+
+    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&classificationName={classification}&startDateTime={startDate}&endDateTime={endDate}&countryCode=AU"
+    print(url)
+    res = requests.get(url)
+    if '_embedded' in res.json():
+        events = res.json()['_embedded']['events']
+        return jsonify(events)
+    else:
+        return ''
 
 @APP.route('/categories', methods=['GET'])
 def getCategories():
-    response = []
-    for event in EVENTS:
-        if event['category'] not in response:
-            response.append(event['category'])
+    response = {
+        'categories': [],
+        'genres': []
+    }
+    searchTerm = (loads(request.args.get('getParams'))["searchTerm"])
+    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&countryCode=AU"
+    res = requests.get(url)
+    events = res.json()['_embedded']['events']
+    for event in events:
+        if event['classifications'][0]['segment']['name'] not in response['categories']:
+            response['categories'].append(event['classifications'][0]['segment']['name'])
+        if event['classifications'][0]['genre']['name'] not in response['genres']:
+            response['genres'].append(event['classifications'][0]['genre']['name'])
     return jsonify(response)
 
 @APP.route('/event', methods=['GET'])
