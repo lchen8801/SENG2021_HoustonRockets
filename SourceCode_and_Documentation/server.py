@@ -215,7 +215,7 @@ def getEvent():
     event['favourite'] = False
     try:
         for i in event['_embedded']['attractions'][0]['externalLinks']:
-            if i != 'wiki' and 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
+            if i != 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
                 event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
             if i == 'wiki':
                 title = event['_embedded']['attractions'][0]['externalLinks'][i][0]['url'].split('/')[-1]
