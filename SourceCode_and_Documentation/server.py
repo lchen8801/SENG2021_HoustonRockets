@@ -214,15 +214,24 @@ def getEvent():
     event['weather'] = weatherInfo
     event['favourite'] = False
     try:
-        for i in event['_embedded']['attractions'][0]['externalLinks']:
-            if i != 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
+        x = list(event['_embedded']['attractions'][0]['externalLinks'].keys())
+        print(x)
+        for i in x:
+            print(i)
+            if 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
                 event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
+            else:
+                event['_embedded']['attractions'][0]['externalLinks'].pop(i)
             if i == 'wiki':
                 title = event['_embedded']['attractions'][0]['externalLinks'][i][0]['url'].split('/')[-1]
                 r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
                 event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
+                event['_embedded']['attractions'][0]['externalLinks'].pop('wiki')
     except:
         pass
+
+    if not event['_embedded']['attractions'][0]['externalLinks']:
+        event['_embedded']['attractions'][0].pop('externalLinks')
 
     if 'description' not in event.keys():
         query = event['name']
