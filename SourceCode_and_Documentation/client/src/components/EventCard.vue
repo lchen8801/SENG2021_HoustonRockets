@@ -9,7 +9,9 @@
     <a v-bind:href="'/event/' + id"
 style="position:absolute;top:0;left:0;height:70%;width:100%;">
     </a>
-    <b-card-text>{{ category }}</b-card-text>
+    <b-card-text>
+      {{ category }} - {{ genre }}
+    </b-card-text>
     <favourite-button v-bind:id="id" v-bind:favourite="favourite">
     </favourite-button>
   </b-card>
@@ -20,7 +22,7 @@ import FavouriteButton from './favouriteButton.vue';
 
 export default {
   name: 'EventCard',
-  props: ['name', 'category', 'img_src', 'id', 'favourite'],
+  props: ['name', 'category', 'genre', 'img_src', 'id', 'favourite'],
   components: {
     favouriteButton: FavouriteButton,
   },
