@@ -172,9 +172,17 @@ def getEvent():
     weatherInfo = next((i for i in r if i['dt'] > int(event['date'])), None)
     event['weather'] = weatherInfo
     event['favourite'] = False
-    for i in event['_embedded']['attractions'][0]['externalLinks']:
-      if 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
-        event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
+    try:
+      for i in event['_embedded']['attractions'][0]['externalLinks']:
+        if 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
+          event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
+        print(i)
+        if i == 'wiki':
+          title = event['_embedded']['attractions'][0]['externalLinks'][i][0]['url'].split('/')[-1]
+          r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
+          event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
+    except:
+      pass
     return jsonify(event)
 
 @APP.route('/favourite', methods=['POST'])
