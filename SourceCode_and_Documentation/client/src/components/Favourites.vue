@@ -1,9 +1,7 @@
 <template>
   <div>
     <h1>Your Favourites</h1>
-    <div style = "padding-bottom: 20px">
-    </div>
-    <div style = "padding-bottom: 20px">
+    <div style = "padding-top: 15px">
     <h2 v-if="favourites.length === 0"> It doesn't look like you have any favourites :( </h2>
     </div>
     <b-card-group deck>
@@ -18,6 +16,8 @@
         style="min-width: 25%; max-width: 35%"
     ></eventcard>
     </b-card-group>
+    <div style = "padding-top: 15px">
+    </div>
   </div>
 </template>
 
