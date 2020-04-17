@@ -55,7 +55,8 @@ user = {
     'last_name': '',
     'email': '',
     'username': '',
-    'password': ''
+    'password': '',
+    'favourites': []
 }
 @APP.route('/nav')
 def nav():
@@ -123,7 +124,8 @@ def signup():
         'last_name': last_name,
         'email': email,
         'username': username,
-        'password': password
+        'password': password,
+        'favourites': []
     })
     print(user_data)
     save()
@@ -131,9 +133,9 @@ def signup():
 
 @APP.route('/logout', methods = ['POST'])
 def logout():
-	global signedIn
-	signedIn = False
-	return jsonify({})
+    global signedIn
+    signedIn = False
+    return jsonify({})
 
 @APP.route('/search', methods=['GET'])
 def search():
@@ -177,11 +179,15 @@ def getEvent():
 
 @APP.route('/favourite', methods=['POST'])
 def favourite():
-    eid = request.get_json().get('eid')
-    favourite = request.get_json().get('isFavourite')
-    for event in EVENTS:
-        if event['id'] == eid:
-            event['favourite'] = favourite
+    global signedIn
+    global user
+    if signedIn:
+        print(user)
+        eid = request.get_json().get('eid')
+        if eid not in user['favourites']:
+            user['favourites'].append(eid)
+        else:
+            user['favourites'].remove(eid)        
     return jsonify({})
 
 def filterCategory(events, category):
@@ -190,6 +196,23 @@ def filterCategory(events, category):
         if event['category'] == category:
             response.append(event)
     return response
+
+@APP.route('/get_favourites', methods=['GET'])
+def get_favourites():
+    favourites = []
+    global user
+    for favourite in user['favourites']:
+        url = f"https://app.ticketmaster.com/discovery/v2/events/{favourite}.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE"
+        res = requests.get(url)
+        event = res.json()
+        print(event)
+        favourites.append(event)
+    return jsonify(favourites)
+
+@APP.route('/check_signed', methods=['GET'])
+def signed():
+    global signedIn
+    return jsonify(signedIn)
 
 if __name__ == '__main__':
     APP.run()
