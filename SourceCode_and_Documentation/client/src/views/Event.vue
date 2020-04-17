@@ -11,7 +11,7 @@
       </favourite-button>
     </div>
     <div class="col-2">
-      <b-button> Buy Tickets </b-button>
+      <b-button v-bind:href="eventdata.url" target="_blank"> Buy Tickets </b-button>
     </div>
     <div class="col">
       <div class="text-center">
@@ -41,19 +41,37 @@
   <div class="col">
       <div class="text-center">
     <h2>Date and Weather</h2>
-      <div class="weathercard" v-if="eventdata.weather != null">
-        <h1>{{ eventdate.toDateString() }}</h1><h4>{{ eventdata.weather.weather[0].main }}</h4>
-        <h1><img v-bind:src="'http://openweathermap.org/img/wn/' + eventdata.weather.weather[0].icon + '@2x.png'">
-        {{ eventdata.weather.main.temp }}°C</h1>
-      <p> Wind: {{ eventdata.weather.wind.speed }}m/s<br>
-      Humidity: {{ eventdata.weather.main.humidity }}%</p>
+      <div class="weathercard">
+        <h1>{{ eventdate.toDateString() }}</h1>
+        <div v-if="eventdata.weather != null">
+          <h4>{{ eventdata.weather.weather[0].main }}</h4>
+          <h1><img v-bind:src="'http://openweathermap.org/img/wn/' + eventdata.weather.weather[0].icon + '@2x.png'">
+          {{ eventdata.weather.main.temp }}°C</h1>
+          <p> Wind: {{ eventdata.weather.wind.speed }}m/s<br>
+          Humidity: {{ eventdata.weather.main.humidity }}%</p>
+        </div>
+        <div v-if="eventdata.weather == null">
+          <p>Weather data is currently unavailable for this event. Please check
+          again closer to the event date.</p>
+        </div>
       </div>
       <h2 style="margin-top:20px;">Venue Information</h2>
       <iframe height="450" style="width:100%;"
       v-bind:src="'https://www.google.com/maps/embed/v1/place?q=' + eventdata._embedded.venues[0].name
-      + 'Hordern%20Pavillion&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk'"
+      + '&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk'"
       allowfullscreen></iframe>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" style="margin-bottom:20px; margin-top:20px;">
+      <h2>External Links</h2><br>
+      <a v-for="item in eventdata._embedded.attractions[0].externalLinks" :key="item[0].url"
+         v-bind:href="item[0].url">
+        <img v-bind:src="item[0].imageLink" onerror="this.onerror=null;
+                                                     this.src='/assets/default.png'"
+         style="margin-right:20px;">
+      </a>
     </div>
   </div>
 </div>

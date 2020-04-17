@@ -170,6 +170,9 @@ def getEvent():
     weatherInfo = next((i for i in r if i['dt'] > int(event['date'])), None)
     event['weather'] = weatherInfo
     event['favourite'] = False
+    for i in event['_embedded']['attractions'][0]['externalLinks']:
+      if 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
+        event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
     return jsonify(event)
 
 @APP.route('/favourite', methods=['POST'])
