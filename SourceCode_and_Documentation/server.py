@@ -204,22 +204,34 @@ def getEvent():
     event = res.json()
     # Get weather information
     r = requests.get(f"http://api.openweathermap.org/data/2.5/forecast?lat={event['_embedded']['venues'][0]['location']['latitude']}&lon={event['_embedded']['venues'][0]['location']['longitude']}&appid=b228ffe1aaa8f657c39a46b39d6d9499&units=metric").json()['list']
-    date = dp.parse(event['dates']['start']['dateTime'])
+    try:
+        date = dp.parse(event['dates']['start']['dateTime'])
+    except:
+        date = dp.parse(event['dates']['start']['localDate'])
+        date += timedelta(hours = 16)
     event['date'] = date.strftime('%s')
-    weatherInfo = next((i for i in r if i['dt'] > int(event['date'])), None)
+    weatherInfo = next((i for i in r if i['dt'] >= int(event['date'])), None)
     event['weather'] = weatherInfo
     event['favourite'] = False
     try:
-      for i in event['_embedded']['attractions'][0]['externalLinks']:
-        if 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
-          event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
-        print(i)
-        if i == 'wiki':
-          title = event['_embedded']['attractions'][0]['externalLinks'][i][0]['url'].split('/')[-1]
-          r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
-          event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
+        for i in event['_embedded']['attractions'][0]['externalLinks']:
+            if i != 'wiki' and 'url' in event['_embedded']['attractions'][0]['externalLinks'][i][0].keys():
+                event['_embedded']['attractions'][0]['externalLinks'][i][0]['imageLink'] = '/assets/' + i + '.png'
+            if i == 'wiki':
+                title = event['_embedded']['attractions'][0]['externalLinks'][i][0]['url'].split('/')[-1]
+                r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
+                event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
     except:
-      pass
+        pass
+
+    if 'description' not in event.keys():
+        query = event['name']
+        if len(query.split()) > 3:
+            query = ' '.join(query.split()[0:3])
+        r = requests.get(f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={query}&utf8=&format=json").json()
+        title = r['query']['search'][0]['title']
+        r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
+        event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
     return jsonify(event)
 
 @APP.route('/favourite', methods=['POST'])
