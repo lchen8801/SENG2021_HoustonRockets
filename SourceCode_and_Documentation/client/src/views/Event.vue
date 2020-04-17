@@ -131,7 +131,6 @@ export default {
 </script>
 
 <style>
-@import './css/weather-icons.min.css';
 
 body {
   padding-top: 65px;
