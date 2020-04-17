@@ -83,13 +83,13 @@ def events():
             i = j + 1
             while i < len(events):
                 event2 = events[i]
+                j = i
                 # print("event2 " + str(events.index(event2)) + " " + event2['id'] + " " + event2['name'])
                 if event1['name'] in event2['name']:
                     events.pop(i)
                     # print("hit")
                 else:
                     break
-            j += 1
         page += 1
 
     return jsonify(events[0:9])
