@@ -6,6 +6,7 @@ import os.path
 import pickle
 import dateutil.parser as dp
 from datetime import datetime, timedelta
+import pygeohash as gh
 
 # config
 DEBUG = True
@@ -144,6 +145,7 @@ def search():
     location = (loads(request.args.get('getParams'))["location"])
     category = (loads(request.args.get('getParams'))["category"])
     genre = (loads(request.args.get('getParams'))["genre"])
+    page = int(loads(request.args.get('getParams'))["page"]) - 1
     
     classification = []
     if category != '' and category != 'Any category':
@@ -169,13 +171,25 @@ def search():
         print(f"date: {date}")
         startDate = dp.parse(date).strftime('%Y-%m-%dT00:00:00Z')
         endDate = dp.parse(date).strftime('%Y-%m-%dT23:59:59Z')
+    
+    geocode = ''
+    if location != '':
+        mapsUrl = f"https://maps.googleapis.com/maps/api/geocode/json?address={location}&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk"
+        mapsRes = requests.get(mapsUrl)
+        coordinates = mapsRes.json()['results'][0]['geometry']['location']
+        lat = coordinates['lat']
+        lng = coordinates['lng']
+        geocode = gh.encode(lat, lng, precision=9)
 
-    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&classificationName={classification}&startDateTime={startDate}&endDateTime={endDate}&countryCode=AU"
+    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&classificationName={classification}&startDateTime={startDate}&endDateTime={endDate}&countryCode=AU&page={page}&geoPoint={geocode}"
     print(url)
     res = requests.get(url)
     if '_embedded' in res.json():
         events = res.json()['_embedded']['events']
-        return jsonify(events)
+        response = {}
+        response['events'] = events
+        response['nEvents'] = res.json()['page']['totalElements']
+        return jsonify(response)
     else:
         return ''
 
@@ -186,14 +200,21 @@ def getCategories():
         'genres': []
     }
     searchTerm = (loads(request.args.get('getParams'))["searchTerm"])
-    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&countryCode=AU"
+    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&countryCode=AU&size=200"
     res = requests.get(url)
-    events = res.json()['_embedded']['events']
-    for event in events:
-        if event['classifications'][0]['segment']['name'] not in response['categories']:
-            response['categories'].append(event['classifications'][0]['segment']['name'])
-        if event['classifications'][0]['genre']['name'] not in response['genres']:
-            response['genres'].append(event['classifications'][0]['genre']['name'])
+    totalPages = res.json()['page']['totalPages']
+    i = 0
+    while i < totalPages:
+        url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&countryCode=AU&page={i}&size=200"
+        res = requests.get(url)
+        print(url)
+        events = res.json()['_embedded']['events']
+        for event in events:
+            if event['classifications'][0]['segment']['name'] not in response['categories']:
+                response['categories'].append(event['classifications'][0]['segment']['name'])
+            if event['classifications'][0]['genre']['name'] not in response['genres']:
+                response['genres'].append(event['classifications'][0]['genre']['name'])
+        i += 1
     return jsonify(response)
 
 @APP.route('/event', methods=['GET'])
@@ -227,11 +248,10 @@ def getEvent():
                 r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
                 event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
                 event['_embedded']['attractions'][0]['externalLinks'].pop('wiki')
+        if not event['_embedded']['attractions'][0]['externalLinks']:
+            event['_embedded']['attractions'][0].pop('externalLinks')
     except:
         pass
-
-    if not event['_embedded']['attractions'][0]['externalLinks']:
-        event['_embedded']['attractions'][0].pop('externalLinks')
 
     if 'description' not in event.keys():
         query = event['name']

@@ -1,11 +1,12 @@
 <template>
   <div class="container-fluid">
-    <navbar @changedSearch="getEvents($event, '', '', '', '')"></navbar>
+    <navbar @changedSearch="getEvents($event, '', '', '', '', 1)"></navbar>
     <div class="row">
       <div class="col-3">
-        <filters @categoryFilter="getEvents(searchTerm, '', '', $event, '')"
-        @genreFilter="getEvents(searchTerm, '', '', '',$event)"
-        @dateFilter="getEvents(searchTerm, $event, '', '', '')"
+        <filters @categoryFilter="getEvents(searchTerm, '', '', $event, '', 1)"
+        @genreFilter="getEvents(searchTerm, '', '', '',$event, 1)"
+        @dateFilter="getEvents(searchTerm, $event, '', '', '', 1)"
+        @locationFilter="getEvents(searchTerm, '', $event, '', '', 1)"
         v-bind:searchTerm="updated_searchTerm" v-bind:key="searchTerm"></filters>
       </div>
       <div class="col-9" style="padding-bottom: 50px">
@@ -24,6 +25,9 @@
             style="min-width: 30%; max-width: 30%"
           ></eventcard>
         </b-card-group>
+        <b-pagination v-model="currentPage" :per-page="perPage" :total-rows="totalItems"
+        align="center" class="mt-4" @change="getEvents(searchTerm, '', '', '', '', currentPage)">
+        </b-pagination>
       </div>
     </div>
   </div>
@@ -45,6 +49,9 @@ export default {
       location: '',
       category: '',
       genre: '',
+      currentPage: 1,
+      perPage: 20,
+      totalItems: 0,
     };
   },
   computed: {
@@ -58,14 +65,18 @@ export default {
     filters: Filters,
   },
   methods: {
-    getEvents(searchVal, dateFilter, locationFilter, categoryFilter, genreFilter) {
+    getEvents(searchVal, dateFilter, locationFilter, categoryFilter, genreFilter, pageSelect) {
       const path = 'http://localhost:5000/search';
+      if (pageSelect !== undefined) {
+        this.currentPage = pageSelect;
+      }
       const getParams = {
         searchTerm: this.$route.params.searchTerm,
         date: this.date,
         location: this.location,
         category: this.category,
         genre: this.genre,
+        page: this.currentPage,
       };
       this.searchTerm = this.$route.params.searchTerm;
       if (searchVal != null) {
@@ -83,7 +94,8 @@ export default {
       axios
         .get(path, { params: { getParams } })
         .then((res) => {
-          this.events = res.data;
+          this.events = res.data.events;
+          this.totalItems = res.data.nEvents;
         })
         .catch((error) => {
           // eslint-disable-next-line

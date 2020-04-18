@@ -26,7 +26,8 @@
       </b-list-group>
     </b-card>
     <b-card header="Location">
-       <b-form-input placeholder="Enter Location"></b-form-input>
+       <b-form-input placeholder="Enter Location" v-model="location" @change="changeLocation()">
+       </b-form-input>
     </b-card>
     <b-card header="Category">
       <b-list-group flush>
@@ -69,6 +70,7 @@ export default {
       genreButton: 'Any genre',
       dateButton: 'Any Date',
       datePicker: '',
+      location: '',
     };
   },
   methods: {
@@ -102,6 +104,9 @@ export default {
       } else {
         this.$emit('dateFilter', date);
       }
+    },
+    changeLocation() {
+      this.$emit('locationFilter', this.location);
     },
   },
   created() {
