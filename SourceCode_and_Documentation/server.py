@@ -104,7 +104,7 @@ def login():
     password = request.get_json().get("password")
     
     for i in user_data:
-        if i['username'] == username and i['password'] == password:
+        if (i['username'] == username or i['email'] == username) and i['password'] == password:
             signedIn = True
             user = i
             return jsonify('success')
@@ -117,6 +117,11 @@ def signup():
     last_name = request.get_json().get("lastName")
     email = request.get_json().get("email")
     username = request.get_json().get("username")
+    for i in user_data:
+        if email == i['email']:
+            return {'status': 'Fail', 'msg': 'This email is already in use.'}
+        elif username == i['username']:
+            return {'status': 'Fail', 'msg': 'This username is already in use.'}
     password = request.get_json().get("password")
     user_data.append({
         'first_name': first_name,
@@ -126,9 +131,8 @@ def signup():
         'password': password,
         'favourites': []
     })
-    print(user_data)
     save()
-    return jsonify({})
+    return jsonify({'status': 'Success'})
 
 @APP.route('/logout', methods = ['POST'])
 def logout():
