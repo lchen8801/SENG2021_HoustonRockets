@@ -2,9 +2,12 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from json import loads
 import requests
+import random
+import string
 import os.path
 import pickle
 import dateutil.parser as dp
+import smtplib
 from datetime import datetime, timedelta
 
 # config
@@ -109,6 +112,26 @@ def login():
             user = i
             return jsonify('success')
     return jsonify('fail')
+
+@APP.route('/reset', methods=['POST'])
+def reset():
+    global user_data
+    email = request.get_json().get('email')
+    print(email)
+    if email not in [i['email'] for i in user_data]:
+        return {}
+    temp_pass = ''.join(random.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(10))
+    print(temp_pass)
+    for i in user_data:
+        if i['email'] == email:
+            i['password'] = temp_pass
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.ehlo()
+    s.starttls()
+    s.login('event.master.recovery', 'eventmaster12345')
+    s.sendmail('event.master.recovery@gmail.com', email, f'Your temporary password is {temp_pass}. Use this to log in and change your password.')
+    s.close()
+    return {}
 
 @APP.route('/signup', methods = ['POST'])
 def signup():
@@ -231,11 +254,10 @@ def getEvent():
                 r = requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles={title}").json()['query']['pages']
                 event['description'] = r[list(r.keys())[0]]['extract'].split('\n\n\n')[0]
                 event['_embedded']['attractions'][0]['externalLinks'].pop('wiki')
+        if not event['_embedded']['attractions'][0]['externalLinks']:
+            event['_embedded']['attractions'][0].pop('externalLinks')
     except:
         pass
-
-    if not event['_embedded']['attractions'][0]['externalLinks']:
-        event['_embedded']['attractions'][0].pop('externalLinks')
 
     if 'description' not in event.keys():
         query = event['name']
