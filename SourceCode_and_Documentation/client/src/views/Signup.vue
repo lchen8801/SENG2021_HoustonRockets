@@ -8,7 +8,7 @@
     <form @submit.prevent="signup">
       <h1 class="h3 mb-3 font-weight-normal">Register</h1>
       <b-alert v-bind:show="showAlert" variant="danger">
-        Passwords do not match.
+        {{ alertMsg }}
       </b-alert>
       <input type="text" id="first_name" class="form-control" placeholder="first name"
 required ref="first_name">
@@ -46,6 +46,7 @@ export default {
   data() {
     return {
       showAlert: false,
+      alertMsg: '',
     };
   },
   methods: {
@@ -69,13 +70,19 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            this.$router.push('/signin');
+            if (response.data.status === 'Fail') {
+              this.alertMsg = response.data.msg;
+              this.showAlert = true;
+            } else {
+              this.$router.push('/signin');
+            }
           })
           .catch((error) => {
             // eslint-disable-next-line
             console.error(error);
           });
       } else {
+        this.alertMsg = 'Passwords do not match.';
         this.showAlert = true;
       }
     },
