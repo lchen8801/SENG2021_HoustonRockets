@@ -155,7 +155,7 @@ def search():
     if len(classification) == 0:
         classification = ''
     
-    if date == 'Any Date' or date == '':
+    if date == 'Any date' or date == '':
         startDate = ''
         endDate = ''
     elif date == 'Today':
@@ -173,7 +173,7 @@ def search():
         endDate = dp.parse(date).strftime('%Y-%m-%dT23:59:59Z')
     
     geocode = ''
-    if location != '':
+    if location != '' and location != 'Any location' and location != 'Enter location':
         mapsUrl = f"https://maps.googleapis.com/maps/api/geocode/json?address={location}&key=AIzaSyCvKEl8IR2YcNzK5P80dQAZ5CI88nvX0nk"
         mapsRes = requests.get(mapsUrl)
         coordinates = mapsRes.json()['results'][0]['geometry']['location']

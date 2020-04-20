@@ -3,8 +3,8 @@
     <h2> Filters </h2>
     <b-card header="Date">
       <b-list-group flush>
-        <b-list-group-item button @click="changeDate('Any Date')"
-        :active="dateButton === 'Any Date'">
+        <b-list-group-item button @click="changeDate('Any date')"
+        :active="dateButton === 'Any date'">
           Any Date
         </b-list-group-item>
         <b-list-group-item button @click="changeDate('Select Date')"
@@ -26,8 +26,18 @@
       </b-list-group>
     </b-card>
     <b-card header="Location">
-       <b-form-input placeholder="Enter Location" v-model="location" @change="changeLocation()">
-       </b-form-input>
+      <b-list-group flush>
+        <b-list-group-item button @click="changeLocation('Any location')"
+        :active="locationButton === 'Any location'">
+          Any location
+        </b-list-group-item>
+        <b-list-group-item button @click="changeLocation('Enter location')"
+        :active="locationButton === 'Enter location'">
+          <b-form-input placeholder="Enter location" v-model="location"
+          @change="changeLocation('Enter location')">
+          </b-form-input>
+        </b-list-group-item>
+      </b-list-group>
     </b-card>
     <b-card header="Category">
       <b-list-group flush>
@@ -68,8 +78,9 @@ export default {
       categoryButton: 'Any category',
       genres: '',
       genreButton: 'Any genre',
-      dateButton: 'Any Date',
+      dateButton: 'Any date',
       datePicker: '',
+      locationButton: 'Any location',
       location: '',
     };
   },
@@ -105,8 +116,13 @@ export default {
         this.$emit('dateFilter', date);
       }
     },
-    changeLocation() {
-      this.$emit('locationFilter', this.location);
+    changeLocation(location) {
+      let emitLocation = location;
+      this.locationButton = location;
+      if (location === 'Enter location') {
+        emitLocation = this.location;
+      }
+      this.$emit('locationFilter', emitLocation);
     },
   },
   created() {

@@ -66,7 +66,8 @@
   </div>
   <div class="row">
     <div class="col" style="margin-bottom:20px; margin-top:20px;">
-    <div v-if="eventdata._embedded.attractions[0].hasOwnProperty('externalLinks')">
+    <div v-if="eventdata._embedded.attractions != undefined &&
+    eventdata._embedded.attractions[0].hasOwnProperty('externalLinks')">
       <h2>External Links</h2><br>
       <a v-for="item in eventdata._embedded.attractions[0].externalLinks" :key="item[0].imageLink"
          v-bind:href="item[0].url">

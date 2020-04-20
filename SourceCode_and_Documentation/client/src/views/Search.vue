@@ -104,7 +104,7 @@ export default {
     },
   },
   created() {
-    this.getEvents(undefined, undefined);
+    this.getEvents(undefined, '', '', '', '', 1);
   },
 };
 </script>
