@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <navbar></navbar>
-    <favourite v-if="signedIn"></favourite>
-    <div style="padding-bottom: 50px">
+    <div class="row">
+      <favourite v-if="signedIn"></favourite>
+    </div>
+    <div class="row" style="padding-bottom: 50px">
       <h1>Upcoming Events</h1>
       <b-card-group deck>
         <eventcard

@@ -7,12 +7,13 @@
       <b-navbar-nav>
         <b-nav-item-dropdown v-for="header in navBarHeaders"
         v-bind:key="header.id" v-bind:text="header.title">
-          <b-dropdown-item v-for="item in header.items" v-bind:key="item.id" href="#">
+          <b-dropdown-item v-for="item in header.items" v-bind:key="item.id"
+          @click="headerSearch(item)">
               {{ item }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-form>
-          <b-form-input ref="searchBar" placeholder="Search"
+          <b-form-input ref="searchBar" placeholder="Search" class="ml-5"
             style="background-color:white;border-color:#CCCCCC;">
           </b-form-input>
           <b-button variant="outline-primary" @click="search">
@@ -80,6 +81,10 @@ export default {
       const searchVal = this.$refs.searchBar.vModelValue;
       this.$emit('changedSearch', searchVal);
       this.$router.push({ name: 'Search', params: { searchTerm: searchVal } }).catch((err) => { console.error(err); });
+    },
+    headerSearch(category) {
+      this.$emit('headerSelect', category);
+      this.$router.push({ name: 'Search', params: { searchTerm: `category: ${category}` } }).catch((err) => { console.error(err); });
     },
   },
   created() {
