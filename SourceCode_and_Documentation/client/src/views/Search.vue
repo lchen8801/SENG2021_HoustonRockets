@@ -1,6 +1,8 @@
 <template>
   <div class="container-fluid">
-    <navbar @changedSearch="getEvents($event, '', '', '', '', 1)"></navbar>
+    <navbar @changedSearch="getEvents($event, '', '', '', '', 1)"
+    @headerSelect="getEvents(`category: ${$event}`, '', '', '', '', 1)">
+    </navbar>
     <div class="row">
       <div class="col-3">
         <filters @categoryFilter="getEvents(searchTerm, '', '', $event, '', 1)"

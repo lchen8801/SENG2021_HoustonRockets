@@ -2,7 +2,7 @@
   <div>
     <h1>Your Favourites</h1>
     <div style = "padding-top: 15px">
-    <h2 v-if="favourites.length === 0"> It doesn't look like you have any favourites :( </h2>
+    <h3 v-if="favourites.length === 0"> It doesn't look like you have any favourites :( </h3>
     </div>
     <b-card-group deck>
     <eventcard
@@ -10,6 +10,7 @@
         v-bind:key="event.id"
         v-bind:name="event.name"
         v-bind:category="event.classifications[0].segment.name"
+        v-bind:genre="event.classifications[0].genre.name"
         v-bind:img_src="event.images[0].url"
         v-bind:id="event.id"
         v-bind:favourite="event.favourite"

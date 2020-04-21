@@ -22,7 +22,7 @@ NAVBAR = [
         'title': 'Music',
         'items': ['All Music', 'Alternative Rock', 'Cabaret', 'Country and Folk', 'Dance/Electronic', 'Festivals',
                   'Hard Rock/Metal', 'Jazz and Blues', 'Miscellaneous', 'New Age and Spiritual', 'R&B/Urban Soul',
-                  'Rap and Hip-Hop', 'Rock and Pop', 'World Music']
+                  'Hip-Hop/Rap', 'Rock and Pop', 'World']
     },
     {
         'title': 'Sport',
@@ -37,7 +37,7 @@ NAVBAR = [
     },
     {
         'title': 'Family & Attractions',
-        'items': ['All Family', 'Children`s Music and Theatre', 'Circus', 'Fairs and Festivals', 'Family Attractions',
+        'items': ['All Family', "Children's Music and Theatre", 'Circus', 'Fairs and Festivals', 'Family Attractions',
                   'Ice Shows', 'Magic Shows']
     }
 ]
@@ -102,6 +102,12 @@ def events():
                 else:
                     break
         page += 1
+    
+    for event in events:
+        if event['id'] in user['favourites']:
+            event['favourite'] = True
+        else:
+            event['favourite'] = False
 
     return jsonify(events[0:9])
 
@@ -197,8 +203,17 @@ def search():
     category = (loads(request.args.get('getParams'))["category"])
     genre = (loads(request.args.get('getParams'))["genre"])
     page = int(loads(request.args.get('getParams'))["page"]) - 1
+
+        
     
     classification = []
+    if searchTerm[0:9] == 'category:':
+        if searchTerm[10:13] == 'All':
+            classification.append(searchTerm[14:])
+        else:
+            classification.append(searchTerm[10:])
+        searchTerm = ' '
+
     if category != '' and category != 'Any category':
         classification.append(category)
     if genre != '' and genre != 'Any genre':
@@ -239,6 +254,11 @@ def search():
         events = res.json()['_embedded']['events']
         response = {}
         response['events'] = events
+        for event in response['events']:
+            if event['id'] in user['favourites']:
+                event['favourite'] = True
+            else:
+                event['favourite'] = False
         response['nEvents'] = res.json()['page']['totalElements']
         return jsonify(response)
     else:
@@ -253,18 +273,22 @@ def getCategories():
     searchTerm = (loads(request.args.get('getParams'))["searchTerm"])
     url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&countryCode=AU&size=200"
     res = requests.get(url)
+    # print(res.json())
     totalPages = res.json()['page']['totalPages']
     i = 0
     while i < totalPages:
         url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&countryCode=AU&page={i}&size=200"
         res = requests.get(url)
         print(url)
+        if '_embedded' not in res.json():
+            return jsonify(response)
         events = res.json()['_embedded']['events']
         for event in events:
             if event['classifications'][0]['segment']['name'] not in response['categories']:
                 response['categories'].append(event['classifications'][0]['segment']['name'])
-            if event['classifications'][0]['genre']['name'] not in response['genres']:
-                response['genres'].append(event['classifications'][0]['genre']['name'])
+            if 'genre' in event['classifications'][0]:
+                if event['classifications'][0]['genre']['name'] not in response['genres']:
+                    response['genres'].append(event['classifications'][0]['genre']['name'])
         i += 1
     return jsonify(response)
 
@@ -284,7 +308,12 @@ def getEvent():
     event['date'] = date.strftime('%s')
     weatherInfo = next((i for i in r if i['dt'] >= int(event['date'])), None)
     event['weather'] = weatherInfo
-    event['favourite'] = False
+
+    if eid in user['favourites']:
+        event['favourite'] = True
+    else: 
+        event['favourite'] = False
+
     try:
         x = list(event['_embedded']['attractions'][0]['externalLinks'].keys())
         print(x)
@@ -324,7 +353,8 @@ def favourite():
         if eid not in user['favourites']:
             user['favourites'].append(eid)
         else:
-            user['favourites'].remove(eid)        
+            user['favourites'].remove(eid)    
+    save()    
     return jsonify({})
 
 def filterCategory(events, category):
@@ -342,7 +372,7 @@ def get_favourites():
         url = f"https://app.ticketmaster.com/discovery/v2/events/{favourite}.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE"
         res = requests.get(url)
         event = res.json()
-        print(event)
+        event['favourite'] = True
         favourites.append(event)
     return jsonify(favourites)
 
