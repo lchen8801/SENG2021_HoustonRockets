@@ -26,10 +26,16 @@
           Sign In/Register
         </b-button>
         <b-nav-item-dropdown v-else v-bind:text="user" right>
-          <b-dropdown-item href="#"> Account Details </b-dropdown-item>
+          <b-dropdown-item href="/passwordchange"> Change Password </b-dropdown-item>
           <b-dropdown-item @click="logout" href="#"> Logout </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
+      <div class = "fixed-bottom" v-if="temp === true">
+        <div class = "alert alert-primary" role = "alert" style = "margin-bottom: 0px;">
+          Hey, it looks like you signed in with a temporary password. Click
+          <a href="/passwordchange"> here </a> to change it.
+        </div>
+      </div>
     </b-navbar>
   </div>
 </template>
@@ -44,6 +50,7 @@ export default {
       navBarHeaders: '',
       signedIn: '',
       user: '',
+      temp: '',
     };
   },
   methods: {
@@ -56,6 +63,7 @@ export default {
           this.signedIn = res.data.signedIn;
           if (this.signedIn) {
             this.user = res.data.user;
+            this.temp = res.data.temp;
           }
         })
         .catch((error) => {
