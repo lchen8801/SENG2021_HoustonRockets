@@ -20,19 +20,25 @@ APP.config.from_object(__name__)
 NAVBAR = [
     {
         'title': 'Music',
-        'items': ['All Music', 'Country', 'Dance/EDM', 'Jazz', 'Pop', 'Rap', 'Rock', 'World']
+        'items': ['All Music', 'Alternative Rock', 'Cabaret', 'Country and Folk', 'Dance/Electronic', 'Festivals',
+                  'Hard Rock/Metal', 'Jazz and Blues', 'Miscellaneous', 'New Age and Spiritual', 'R&B/Urban Soul',
+                  'Rap and Hip-Hop', 'Rock and Pop', 'World Music']
     },
     {
         'title': 'Sport',
-        'items': ['All Sport', 'AFL', 'Basketball', 'Boxing', 'Cricket', 'Golf', 'Horse Racing', 'Netball', 'Rugby', 'Soccer', 'Tennis']
+        'items': ['All Sport', 'AFL', 'Basketball', 'Boxing', 'Competitions', 'Cricket', 'Field Sport', 'Golf',
+                  'Handball', 'Hockey', 'Horse Racing', 'Mixed Martial Arts', 'Motorsport', 'Netball', 'Rugby League',
+                  'Rugby Union', 'Soccer', 'Tennis', 'Wrestling']
     },
     {
-        'title': 'Arts',
-        'items': ['All Arts', 'Ballet and Dance', 'Classical', 'Comedy', 'Fashion', 'Museums and Exhibits', 'Musical', 'Plays']
+        'title': 'Arts, Theatre & Comedy',
+        'items': ['All Arts, Theatre & Comedy', 'Ballet and Dance', 'Classical', 'Comedy', 'Fashion',
+                  'Museums and Exhibits', 'Musicals', 'Opera', 'Plays']
     },
     {
-        'title': 'Food',
-        'items': ['All Food', 'Fairs', 'Markets']
+        'title': 'Family & Attractions',
+        'items': ['All Family', 'Children`s Music and Theatre', 'Circus', 'Fairs and Festivals', 'Family Attractions',
+                  'Ice Shows', 'Magic Shows']
     }
 ]
 
