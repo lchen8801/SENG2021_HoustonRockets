@@ -7,6 +7,7 @@ import Reset from '../views/Reset.vue';
 import EmailSent from '../views/EmailSent.vue';
 import Search from '../views/Search.vue';
 import Event from '../views/Event.vue';
+import PasswordChange from '../views/PasswordChange.vue';
 
 Vue.use(Router);
 export default new Router({
@@ -47,6 +48,11 @@ export default new Router({
       path: '/event/:id',
       name: 'Event',
       component: Event,
+    },
+    {
+      path: '/passwordchange',
+      name: 'PasswordChange',
+      component: PasswordChange,
     },
   ],
 });

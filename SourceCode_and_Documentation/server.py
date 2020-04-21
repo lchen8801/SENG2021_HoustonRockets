@@ -72,7 +72,8 @@ def nav():
     response = {
         'navBarHeaders': NAVBAR,
         'signedIn': signedIn,
-        'user': user['username']
+        'user': user['username'],
+        'temp': user.get('temp')
     }
     return jsonify(response)
 
@@ -132,13 +133,30 @@ def reset():
     for i in user_data:
         if i['email'] == email:
             i['password'] = temp_pass
+            i['temp'] = True
+            break
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.ehlo()
     s.starttls()
     s.login('event.master.recovery', 'eventmaster12345')
     s.sendmail('event.master.recovery@gmail.com', email, f'Your temporary password is {temp_pass}. Use this to log in and change your password.')
     s.close()
+    save()
     return {}
+
+@APP.route('/changepassword', methods = ['POST'])
+def changepassword():
+    global user_data
+    curr_password = request.get_json().get("currPassword")
+    new_password = request.get_json().get("newPassword")
+
+    if user['password'] != curr_password:
+        return {'status': 'Fail', 'msg': 'Current password is incorrect'}
+    user['password'] = new_password
+    user.pop('temp', None)
+    save()
+    return {}
+
 
 @APP.route('/signup', methods = ['POST'])
 def signup():
