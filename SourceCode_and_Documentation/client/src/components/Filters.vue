@@ -7,10 +7,6 @@
         :active="dateButton === 'Any date'">
           Any Date
         </b-list-group-item>
-        <b-list-group-item button @click="changeDate('Select Date')"
-        :active="dateButton === 'Select Date'">
-            <b-form-datepicker v-model="datePicker"></b-form-datepicker>
-        </b-list-group-item>
         <b-list-group-item button @click="changeDate('Today')"
         :active="dateButton === 'Today'">
           Today
@@ -22,6 +18,11 @@
         <b-list-group-item button @click="changeDate('This week')"
         :active="dateButton === 'This week'">
           This week
+        </b-list-group-item>
+        <b-list-group-item button @click="changeDate('Select Date')"
+        :active="dateButton === 'Select Date'">
+            <b-form-datepicker dropup no-flip v-model="datePicker">
+            </b-form-datepicker>
         </b-list-group-item>
       </b-list-group>
     </b-card>

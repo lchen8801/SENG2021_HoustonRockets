@@ -214,7 +214,7 @@ def search():
         lng = coordinates['lng']
         geocode = gh.encode(lat, lng, precision=9)
 
-    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&classificationName={classification}&startDateTime={startDate}&endDateTime={endDate}&countryCode=AU&page={page}&geoPoint={geocode}"
+    url = f"https://app.ticketmaster.com/discovery/v2/events.json?apikey=zt4Jdbkyp5qGsV6M5GKGHCR3GKlDVgxE&keyword={searchTerm}&classificationName={classification}&startDateTime={startDate}&endDateTime={endDate}&countryCode=AU&page={page}&geoPoint={geocode}&radius=60"
     print(url)
     res = requests.get(url)
     if '_embedded' in res.json():
