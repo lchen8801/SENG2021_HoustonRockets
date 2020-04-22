@@ -67,6 +67,16 @@ user = {
     'password': '',
     'favourites': []
 }
+
+emptyUser = {
+    'first_name': '',
+    'last_name': '',
+    'email': '',
+    'username': '',
+    'password': '',
+    'favourites': []
+}
+
 @APP.route('/nav')
 def nav():
     response = {
@@ -191,7 +201,9 @@ def signup():
 @APP.route('/logout', methods = ['POST'])
 def logout():
     global signedIn
+    global user
     signedIn = False
+    user = emptyUser
     return jsonify({})
 
 @APP.route('/search', methods=['GET'])
