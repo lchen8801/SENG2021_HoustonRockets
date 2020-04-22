@@ -14,6 +14,7 @@
             v-bind:category="event.classifications[0].segment.name"
             v-bind:genre="event.classifications[0].genre.name"
             v-bind:img_src="event.images[0].url"
+            v-bind:date="event.dates.start.localDate"
             v-bind:id="event.id"
             v-bind:favourite="event.favourite"
             style="min-width: 25%; max-width: 35%"

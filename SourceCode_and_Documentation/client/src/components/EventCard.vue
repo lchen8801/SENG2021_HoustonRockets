@@ -11,6 +11,7 @@ style="position:absolute;top:0;left:0;height:70%;width:100%;">
     </a>
     <b-card-text>
       {{ category }} - {{ genre }}
+      <p>{{ date }}</p>
     </b-card-text>
     <favourite-button v-bind:id="id" v-bind:favourite="favourite">
     </favourite-button>
@@ -22,7 +23,7 @@ import FavouriteButton from './favouriteButton.vue';
 
 export default {
   name: 'EventCard',
-  props: ['name', 'category', 'genre', 'img_src', 'id', 'favourite'],
+  props: ['name', 'category', 'genre', 'date', 'img_src', 'id', 'favourite'],
   components: {
     favouriteButton: FavouriteButton,
   },

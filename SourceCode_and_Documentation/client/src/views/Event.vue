@@ -3,15 +3,6 @@
     <navbar></navbar>
 <div class="container">
   <div class="row">
-    <div class="col-1">
-      <favourite-button v-bind:id="eventdata.id" v-bind:favourite="eventdata.favourite">
-      </favourite-button>
-    </div>
-    <div class="col-2">
-      <b-button v-bind:href="eventdata.url" target="_blank"> Buy Tickets </b-button>
-    </div>
-  </div>
-  <div class="row">
     <div class="col">
       <h1> {{ eventdata.name }} </h1>
     </div>
@@ -33,7 +24,16 @@
       allowfullscreen></iframe>
     </div>
   </div>
-  <div class="row" style="margin-top:5%">
+  <div class="row"  style="margin-top:25px">
+    <div class="col-1">
+      <favourite-button v-bind:id="eventdata.id" v-bind:favourite="eventdata.favourite">
+      </favourite-button>
+    </div>
+    <div class="col-2">
+      <b-button v-bind:href="eventdata.url" target="_blank"> Buy Tickets </b-button>
+    </div>
+  </div>
+  <div class="row">
     <div class="col">
       <div class="weathercard">
         <p>{{ eventdata.description }}</p>

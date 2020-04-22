@@ -1,6 +1,6 @@
 <template>
   <b-button pill variant="outline-warning" v-on:click.stop="favouriting" :pressed="isFavourite">
-    <img src="../assets/star.png" width="20px" height="20px" />
+    <img src="../assets/star.png" width="20px" height="20px" class="mb-1"/>
   </b-button>
 </template>
 
@@ -23,18 +23,16 @@ export default {
         .then((res) => {
           console.log(res.data);
           if (res.data) {
-            if (this.$props.favourite) {
+            if (this.isFavourite) {
               this.isFavourite = false;
             } else {
               this.isFavourite = true;
             }
             path = 'http://localhost:5000/favourite';
             const eid = this.$props.id;
-            const isFavourite = this.$props.favourite;
             axios
               .post(path, {
                 eid,
-                isFavourite,
               })
               .then((response) => {
                 console.log(response);
